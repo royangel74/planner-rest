@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "tab_event", schema = "planner")
 public class Event {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)

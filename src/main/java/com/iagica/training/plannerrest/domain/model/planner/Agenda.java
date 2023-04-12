@@ -18,7 +18,7 @@ import java.time.LocalTime;
        uniqueConstraints = {@UniqueConstraint( columnNames = {"masterdate", "starteventtime", "endeventtime", "event_id"})})
 public class Agenda {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
