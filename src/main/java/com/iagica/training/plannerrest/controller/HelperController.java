@@ -1,5 +1,6 @@
 package com.iagica.training.plannerrest.controller;
 
+import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
 import com.iagica.training.plannerrest.services.helper.AuthenticationService;
 import com.iagica.training.plannerrest.services.helper.HelperService;
@@ -34,5 +35,28 @@ public class HelperController {
     @GetMapping("/eventType/{id}")
     public ResponseEntity<EventTypeResponse> eventTypeFindById(@PathVariable Integer id) throws Exception {
         return ResponseEntity.ok(helperService.findById(id));
+    }
+
+    @PostMapping("/evenType/insert")
+    public ResponseEntity<?> eventTypeInsert(@RequestBody EventTypeRequest eventTypeRequest) throws Exception {
+        helperService.insertEventType(eventTypeRequest);
+        return ResponseEntity.ok(null);
+    }
+
+    @DeleteMapping("/eventType/delete/{id}")
+    public ResponseEntity<?> eventTypeDelete(@PathVariable Integer id) throws Exception {
+        helperService.deleteEventType(id);
+        return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/eventType/findByEventName/{name}")
+    public ResponseEntity<EventTypeResponse> eventTypeFindName(@PathVariable String name) throws Exception {
+        return  ResponseEntity.ok(helperService.findEventTypeByName(name));
+    }
+
+    @PutMapping("/eventType/editEventType")
+    public ResponseEntity<?> eventTypeEdete(@RequestBody EventTypeRequest eventTypeRequest) throws Exception {
+        helperService.putEventType(eventTypeRequest);
+        return ResponseEntity.ok(null);
     }
 }
