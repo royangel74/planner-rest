@@ -1,36 +1,49 @@
 package com.iagica.training.plannerrest.domain.model.planner;
 
-import com.iagica.training.plannerrest.domain.model.helper.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tab_event", schema = "planner")
+@Table(name = "tab_event", schema = "planner", catalog = "dbplanner")
 public class Event {
     @Id
-    @GeneratedValue
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "uidenvent", nullable = false)
+    private Integer uidenvent;
+    @Basic
+    @Column(name = "uideventtype", nullable = false)
+    private Integer uideventtype;
+    @Basic
+    @Column(name = "eventdescription", nullable = true, length = 200)
+    private String eventdescription;
+    @Basic
+    @Column(name = "eventcreation", nullable = false)
+    private Timestamp eventcreation;
+    @Basic
+    @Column(name = "eventupdate", nullable = true)
+    private Timestamp eventupdate;
 
-    @Column(nullable = false)
-    private String description;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event that = (Event) o;
+        return Objects.equals(uidenvent, that.uidenvent) && Objects.equals(uideventtype, that.uideventtype) && Objects.equals(eventdescription, that.eventdescription) && Objects.equals(eventcreation, that.eventcreation) && Objects.equals(eventupdate, that.eventupdate);
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public User user;
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(uidenvent, uideventtype, eventdescription, eventcreation, eventupdate);
+    }
 }

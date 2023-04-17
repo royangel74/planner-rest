@@ -1,5 +1,6 @@
 package com.iagica.training.plannerrest.controller;
 
+import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
 import com.iagica.training.plannerrest.services.helper.AuthenticationService;
 import com.iagica.training.plannerrest.services.helper.HelperService;
@@ -22,17 +23,22 @@ public class HelperController {
     private final HelperService helperService;
 
     @PostMapping("/refresh-token")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response ) throws IOException {
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response ) throws IOException{
         service.refreshToken(request, response);
     }
 
     @GetMapping("/eventType")
-    public ResponseEntity<List<EventTypeResponse>> EventTypeFindAll() throws Exception {
-        return ResponseEntity.ok(helperService.findAll());
+    public ResponseEntity<List<EventTypeResponse>> findAllEventType() throws Exception {
+        return ResponseEntity.ok(helperService.findAllEventType());
     }
 
     @GetMapping("/eventType/{id}")
-    public ResponseEntity<EventTypeResponse> eventTypeFindById(@PathVariable Integer id) throws Exception {
-        return ResponseEntity.ok(helperService.findById(id));
+    public ResponseEntity<EventTypeResponse> findByIdEventType(@PathVariable Integer id) {
+        return ResponseEntity.ok(helperService.findByIdEventType(id));
+    }
+
+    @PutMapping("/eventType")
+    public void saveEventType(@RequestBody EventTypeRequest eventType) {
+        helperService.saveEventType(eventType);
     }
 }

@@ -11,43 +11,39 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tab_user", schema = "helper")
+@Table(name = "tab_user", schema = "helper", catalog = "dbplanner")
 public class User implements UserDetails {
-
     @Id
-    @GeneratedValue
-    private Integer id;
-    private String firstname;
-    private String lastname;
-    @Column(unique = true)
-    private String email;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "uiduser", nullable = false)
+    private Integer uiduser;
+    @Basic
+    @Column(name = "name", nullable = false, length = 256)
+    private String name;
+    @Basic
+    @Column(name = "surname", nullable = false, length = 256)
+    private String surname;
+    @Basic
+    @Column(name = "email", nullable = false, length = 256, unique = true)
+    private String username;
+    @Basic
+    @Column(name = "password", nullable = false, length = 128)
     private String password;
-
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 128)
     private Role role;
-
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
     }
 
     @Override
@@ -70,4 +66,16 @@ public class User implements UserDetails {
         return true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User that = (User) o;
+        return uiduser == that.uiduser && Objects.equals(name, that.name) && Objects.equals(surname, that.surname) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(role, that.role);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uiduser, name, surname, username, password, role);
+    }
 }

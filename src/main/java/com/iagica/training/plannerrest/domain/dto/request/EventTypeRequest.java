@@ -1,4 +1,4 @@
-package com.iagica.training.plannerrest.domain.dto.response;
+package com.iagica.training.plannerrest.domain.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventTypeResponse {
-    Integer id;
+public class EventTypeRequest {
     String eventName;
     Integer duration;
 }
