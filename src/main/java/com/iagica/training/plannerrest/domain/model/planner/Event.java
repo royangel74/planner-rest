@@ -1,5 +1,6 @@
 package com.iagica.training.plannerrest.domain.model.planner;
 
+import com.iagica.training.plannerrest.domain.model.helper.EventType;
 import com.iagica.training.plannerrest.domain.model.helper.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,10 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="event_type_id")
+    public EventType eventType;
 
     @Column(nullable = false)
     private String description;

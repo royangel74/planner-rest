@@ -54,9 +54,9 @@ public class HelperController {
         return  ResponseEntity.ok(helperService.findEventTypeByName(name));
     }
 
-    @PutMapping("/eventType/editEventType")
-    public ResponseEntity<?> eventTypeEdete(@RequestBody EventTypeRequest eventTypeRequest) throws Exception {
-        helperService.putEventType(eventTypeRequest);
+    @PutMapping("/eventType/update")
+    public ResponseEntity<?> eventTypeUpdate(@RequestBody EventTypeRequest eventTypeRequest) throws Exception {
+        helperService.updateEventType(eventTypeRequest);
         return ResponseEntity.ok(null);
     }
 }

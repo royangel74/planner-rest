@@ -69,7 +69,7 @@ public class HelperService {
         }
     }
 
-    public void putEventType(EventTypeRequest eventTypeRequest) throws Exception {
+    public void updateEventType(EventTypeRequest eventTypeRequest) throws Exception {
         Optional<EventType> eventTypeResponse = eventTypeRepository.findById(eventTypeRequest.getId());
         EventType eventType = modelMapper.map(eventTypeRequest, EventType.class);
 
