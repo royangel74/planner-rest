@@ -9,6 +9,7 @@ import com.iagica.training.plannerrest.repository.planner.AgendaRepository;
 import com.iagica.training.plannerrest.repository.planner.EventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.hibernate.boot.jaxb.mapping.JaxbGenericIdGenerator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
@@ -95,6 +96,20 @@ public class PlannerService {
             }).collect(Collectors.toList());
         }
         return agendaResponses;
+    }
+
+    public void insertAgenda(AgendaRequest agendaRequest)throws Exception{
+         Agenda agenda = modelMapper.map(agendaRequest,Agenda.class);
+         agendaRepository.save(agenda);
+    }
+
+    public void deleteAgenda(Integer id)throws Exception{
+        Optional<Agenda> agenda = agendaRepository.findById(id);
+        if(!agenda.isEmpty()){
+            agendaRepository.delete(agenda.get());
+        }else{
+            throw new Exception("Nessun elemento con id "+id+" trovato.");
+        }
     }
 }
 

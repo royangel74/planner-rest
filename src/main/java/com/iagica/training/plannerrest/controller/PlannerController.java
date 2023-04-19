@@ -62,4 +62,16 @@ public class PlannerController {
         return ResponseEntity.ok(plannerService.findAgendaByOrari(agendaRequest));
     }
 
+    @PostMapping("/agenda/insertAgenda")
+    public ResponseEntity<?> insertAgenda(@RequestBody AgendaRequest agendaRequest)throws Exception{
+        plannerService.insertAgenda(agendaRequest);
+        return ResponseEntity.ok(null);
+    }
+
+    @DeleteMapping("/agenda/delete/{id}")
+    public ResponseEntity<?> deleteAgenda(@PathVariable Integer id)throws Exception{
+        plannerService.deleteAgenda(id);
+        return ResponseEntity.ok(null);
+    }
+
 }
