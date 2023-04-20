@@ -23,7 +23,7 @@ public class HelperService {
 
     public List<EventTypeResponse> findAll() throws Exception {
         return eventTypeRepository.findAll().stream().map(eventType -> {
-            var eventTypeResponse = new EventTypeResponse(eventType.getId(), eventType.getEventName());
+            var eventTypeResponse = new EventTypeResponse(eventType.getUideventtype(), eventType.getEventName());
             return eventTypeResponse;
         }).collect(Collectors.toList());
     }
@@ -31,7 +31,7 @@ public class HelperService {
     public EventTypeResponse findById(Integer id) throws Exception{
         Optional<EventType> eventType = eventTypeRepository.findById(id);
         if (!eventType.isEmpty()) {
-            return new EventTypeResponse(eventType.get().getId(), eventType.get().getEventName());
+            return new EventTypeResponse(eventType.get().getUideventtype(), eventType.get().getEventName());
         }
         return null;
     }
@@ -62,7 +62,7 @@ public class HelperService {
     public EventTypeResponse findEventTypeByName(String eventName) throws Exception {
         Optional<EventType> eventType = eventTypeRepository.findByEventName(eventName);
         if (!eventType.isEmpty()) {
-            var eventTypeResponse = new EventTypeResponse(eventType.get().getId(), eventType.get().getEventName());
+            var eventTypeResponse = new EventTypeResponse(eventType.get().getUideventtype(), eventType.get().getEventName());
             return eventTypeResponse;
         } else {
             throw new Exception("La ricerca non ha prodotto risultati");

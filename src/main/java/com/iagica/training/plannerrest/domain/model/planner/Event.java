@@ -1,5 +1,6 @@
 package com.iagica.training.plannerrest.domain.model.planner;
 
+import com.iagica.training.plannerrest.domain.model.helper.EventType;
 import com.iagica.training.plannerrest.domain.model.helper.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,17 +21,23 @@ import java.time.LocalDateTime;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name="uidenvent",nullable = false)
+    private Integer uidEnvent;
 
-    @Column(nullable = false)
+    @Column(name="eventdescription",nullable = true,length = 255)
     private String description;
     @CreatedDate
-    private LocalDateTime createdAt;
+    @Column(name="eventcreation",nullable = false)
+    private LocalDateTime eventcreation;
     @LastModifiedDate
+    @Column(name="eventupdate",nullable = true)
     private LocalDateTime modifiedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="uideventtype")
+    public EventType eventType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name ="uiduser")
     public User user;
 
 }

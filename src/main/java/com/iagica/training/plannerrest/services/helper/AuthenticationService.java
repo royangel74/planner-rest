@@ -6,8 +6,8 @@ import com.iagica.training.plannerrest.domain.dto.request.RegisterRequest;
 import com.iagica.training.plannerrest.domain.dto.response.AuthenticationResponse;
 import com.iagica.training.plannerrest.domain.model.helper.Role;
 import com.iagica.training.plannerrest.domain.model.helper.Token;
-import com.iagica.training.plannerrest.domain.model.helper.TokenType;
 import com.iagica.training.plannerrest.domain.model.helper.User;
+import com.iagica.training.plannerrest.domain.model.helper.TokenType;
 import com.iagica.training.plannerrest.repository.helper.TokenRepository;
 import com.iagica.training.plannerrest.repository.helper.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,8 +32,8 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
-                .name(request.getName())
-                .surname(request.getSurname())
+                .name(request.getFirstname())
+                .surname(request.getLastname())
                 .username(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
@@ -55,7 +55,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
+        var user = repository.findByUsername(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -99,7 +99,7 @@ public class AuthenticationService {
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.repository.findByEmail(userEmail)
+            var user = this.repository.findByUsername(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateToken(user);

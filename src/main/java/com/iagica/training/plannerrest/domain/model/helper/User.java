@@ -33,12 +33,10 @@ public class User implements UserDetails {
     @Column(name="email",unique = true)
     private String username;
     @Basic
-    @Column(name="role",nullable = false,length = 128)
+    @Column(name="password",nullable = false,length = 128)
     private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Basic
     @Column(name="role",nullable = false,length = 128)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Override

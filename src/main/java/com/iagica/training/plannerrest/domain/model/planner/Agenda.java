@@ -15,25 +15,26 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "tab_agenda", schema = "planner",
-       uniqueConstraints = {@UniqueConstraint( columnNames = {"masterdate", "starteventtime", "endeventtime", "event_id"})})
+       uniqueConstraints = {@UniqueConstraint( columnNames = {"masterdate", "eventstart", "eventexpired", "uidenvent"})})
 public class Agenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="uidagenda",nullable = false)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(name="masterdate",nullable = false)
     private LocalDate masterDate;
 
-    @Column(nullable = false)
-    private LocalTime startEventTime;
+    @Column(name="eventStart",nullable = false)
+    private LocalTime eventStart;
 
-    @Column(nullable = false)
-    private LocalTime endEventTime;
+    @Column(name="eventexpired",nullable = false)
+    private LocalTime eventExpired;
 
-    @Column(nullable = false)
-    private Boolean eventPublic;
+    @Column(name="eventpublic",nullable = false,length = 255)
+    private String eventPublic;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "uidenvent")
     public Event event;
 }

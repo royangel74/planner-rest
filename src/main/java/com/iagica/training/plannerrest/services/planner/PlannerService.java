@@ -48,7 +48,7 @@ public class PlannerService {
 
     public void insertEvent(EventRequest eventRequest) throws Exception {
         Event event = modelMapper.map(eventRequest, Event.class);
-        event.setCreatedAt(LocalDateTime.now());
+        event.setEventcreation(LocalDateTime.now());
 
         eventRepository.save(event);
     }
@@ -66,7 +66,7 @@ public class PlannerService {
     public void updateEvent(EventRequest eventRequest) throws Exception {
         Optional<Event> eventResponse = eventRepository.findById(eventRequest.getId());
         Event event = modelMapper.map(eventRequest, Event.class);
-        event.setCreatedAt(eventResponse.get().getCreatedAt());
+        event.setEventcreation(eventResponse.get().getEventcreation());
         event.setModifiedAt(LocalDateTime.now());
 
         if (!eventResponse.isEmpty()) {
