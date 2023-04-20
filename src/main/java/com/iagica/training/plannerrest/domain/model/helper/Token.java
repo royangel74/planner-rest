@@ -16,16 +16,20 @@ public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "uidtoken",nullable = false)
     public Integer id;
-
-    @Column(unique = true)
+    @Basic
+    @Column(name = "token",unique = true,length = 255)
     public String token;
-
+    @Basic
     @Enumerated(EnumType.STRING)
+    @Column(name="tokentype",nullable = false,length = 255)
     public TokenType tokenType = TokenType.BEARER;
-
+    @Basic
+    @Column(name = "revoked",nullable = false)
     public boolean revoked;
-
+    @Basic
+    @Column(name = "expired",nullable = false)
     public boolean expired;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -22,17 +22,26 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "uiduser",nullable = false)
     private Integer id;
+    @Basic
+    @Column(name="name",nullable = false,length = 255)
     private String firstname;
+    @Basic
+    @Column(name="surname",nullable = false,length = 255)
     private String lastname;
-    @Column(unique = true)
+    @Column(name="email",unique = true)
     private String email;
+    @Basic
+    @Column(name="role",nullable = false,length = 128)
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Basic
+    @Column(name="role",nullable = false,length = 128)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "uiduser")
     private List<Token> tokens;
 
     @Override
