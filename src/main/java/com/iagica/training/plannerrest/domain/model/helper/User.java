@@ -23,15 +23,15 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "uiduser",nullable = false)
-    private Integer id;
+    private Integer uiduser;
     @Basic
     @Column(name="name",nullable = false,length = 255)
-    private String firstname;
+    private String name;
     @Basic
     @Column(name="surname",nullable = false,length = 255)
-    private String lastname;
+    private String surname;
     @Column(name="email",unique = true)
-    private String email;
+    private String username;
     @Basic
     @Column(name="role",nullable = false,length = 128)
     private String password;
@@ -40,9 +40,6 @@ public class User implements UserDetails {
     @Basic
     @Column(name="role",nullable = false,length = 128)
     private Role role;
-
-    @OneToMany(mappedBy = "uiduser")
-    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -56,7 +53,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
