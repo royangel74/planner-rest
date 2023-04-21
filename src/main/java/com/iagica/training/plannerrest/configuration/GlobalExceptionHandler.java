@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Optional.ofNullable;
-
+@ControllerAdvice
 public class GlobalExceptionHandler {
     private final Logger logger = LogManager.getLogger();
 
