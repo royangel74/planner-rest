@@ -12,11 +12,11 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AgendaRequest {
-    Integer id;
+    Integer uidAgenda;
     LocalDate masterDate;
-    LocalTime startEventTime;
-    LocalTime endEventTime;
-    boolean eventPublic;
+    LocalTime eventStart;
+    LocalTime eventExpired;
+    String eventPublic;
     EventRequest event;
 
 }

@@ -16,8 +16,8 @@ public class AgendaResponse {
     Integer id;
     LocalDate masterDate;
     LocalTime startEventTime;
-    LocalTime endEventTime;
-    boolean eventPublic;
+    LocalTime eventExpired;
+    String eventPublic;
     EventResponse event;
 
 

@@ -64,7 +64,7 @@ public class PlannerService {
     }
 
     public void updateEvent(EventRequest eventRequest) throws Exception {
-        Optional<Event> eventResponse = eventRepository.findById(eventRequest.getId());
+        Optional<Event> eventResponse = eventRepository.findById(eventRequest.getUidEnvent());
         Event event = modelMapper.map(eventRequest, Event.class);
         event.setEventcreation(eventResponse.get().getEventcreation());
         event.setModifiedAt(LocalDateTime.now());

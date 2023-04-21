@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventRequest {
-    Integer id;
+    Integer uidEnvent;
     String description;
     EventTypeRequest eventType;
     UserRequest user;

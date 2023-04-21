@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventResponse {
-    Integer id;
+    Integer uidEnvent;
     String description;
     EventTypeResponse eventType;
     UserResponse user;

@@ -38,9 +38,9 @@ public class AgendaRepositoryCustomImpl implements AgendaRepositoryCustom{
         Join<Event, User>  users = events.join("user",JoinType.INNER);
         query.select(agenda).where(cb.and(
                 cb.between(agenda.get("masterDate"),agendaRequest.getMasterDate(),agendaRequest.getMasterEndDate()),
-                cb.between(agenda.get("startEventTime"),agendaRequest.getStartEventTime(),agendaRequest.getEndEventTime()),
+                cb.between(agenda.get("eventStart"),agendaRequest.getStartEventTime(),agendaRequest.getEndEventTime()),
                 //  cb.equal(agenda.get("eventPublic"),agendaRequest.isEventPublic()),
-                cb.equal(users.get("id"),id)));
+                cb.equal(users.get("uidUser"),id)));
 
         List<Agenda> agenda1 = entityManager.createQuery(query).getResultList().stream().toList();
 

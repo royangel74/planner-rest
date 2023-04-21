@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventTypeRequest {
-    Integer id;
+    Integer uidEventType;
     String eventName;
 }
