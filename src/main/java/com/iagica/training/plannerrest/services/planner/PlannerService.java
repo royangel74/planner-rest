@@ -3,6 +3,7 @@ import com.iagica.training.plannerrest.domain.dto.request.*;
 import com.iagica.training.plannerrest.domain.dto.response.AgendaResponse;
 import com.iagica.training.plannerrest.domain.dto.response.EventResponse;
 
+import com.iagica.training.plannerrest.domain.exception.NotFoundException;
 import com.iagica.training.plannerrest.domain.model.planner.Agenda;
 import com.iagica.training.plannerrest.domain.model.planner.Event;
 import com.iagica.training.plannerrest.repository.planner.AgendaRepository;
@@ -12,9 +13,13 @@ import lombok.extern.java.Log;
 import org.hibernate.boot.jaxb.mapping.JaxbGenericIdGenerator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.validation.BindValidationException;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 
+import javax.naming.Binding;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,14 +48,16 @@ public class PlannerService {
             EventResponse eventResponse = modelMapper.map(event,EventResponse.class);
             return eventResponse;
         }
-        return null;
+         throw new NotFoundException(String.format("Evento con ID: %s non è presente",id));
     }
 
     public void insertEvent(EventRequest eventRequest) throws Exception {
-        Event event = modelMapper.map(eventRequest, Event.class);
-        event.setEventcreation(LocalDateTime.now());
 
-        eventRepository.save(event);
+            Event event = modelMapper.map(eventRequest, Event.class);
+            event.setEventcreation(LocalDateTime.now());
+            eventRepository.save(event);
+
+
     }
 
     public void deleteEvent(Integer id) throws Exception {
@@ -59,7 +66,7 @@ public class PlannerService {
         if (!event.isEmpty()) {
             eventRepository.delete(event.get());
         } else {
-            throw new Exception(String.format("L'id evento %s è inesistente", id));
+            throw new NotFoundException(String.format("L'Id Evento %s non è presente", id));
         }
     }
 

@@ -2,12 +2,16 @@ package com.iagica.training.plannerrest.services.helper;
 
 import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
+import com.iagica.training.plannerrest.domain.exception.NotFoundException;
+import com.iagica.training.plannerrest.domain.exception.DuplicateException;
 import com.iagica.training.plannerrest.domain.model.helper.EventType;
 import com.iagica.training.plannerrest.repository.helper.EventTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,10 +37,11 @@ public class HelperService {
         if (!eventType.isEmpty()) {
             return new EventTypeResponse(eventType.get().getUidEventType(), eventType.get().getEventName());
         }
-        return null;
+        throw new NotFoundException(String.format("Event-Type whit ID: %s non presente ",id.intValue()));
     }
 
     public void insertEventType(EventTypeRequest eventTypeRequest) throws Exception {
+
         List<EventType> listEventTypes = eventTypeRepository.findAll();
         boolean verified = listEventTypes.stream()
                 .noneMatch(e -> e.getEventName().equals(eventTypeRequest.getEventName()));
@@ -46,7 +51,7 @@ public class HelperService {
         if (verified) {
             eventTypeRepository.save(eventType);
         } else {
-            throw new Exception("Il tipo di evento è già presente");
+            throw new DuplicateException(String.format("Type-Event con eventName: %s è già presente",eventTypeRequest.getEventName()));
         }
     }
 
@@ -55,7 +60,7 @@ public class HelperService {
         if (!eventType.isEmpty()) {
             eventTypeRepository.delete(eventType.get());
         } else {
-            throw new Exception("L'evento risulta non esistente");
+            throw new NotFoundException(String.format("Event-Type whit ID: %s non presente ",id.intValue()));
         }
     }
 
@@ -65,7 +70,7 @@ public class HelperService {
             var eventTypeResponse = new EventTypeResponse(eventType.get().getUidEventType(), eventType.get().getEventName());
             return eventTypeResponse;
         } else {
-            throw new Exception("La ricerca non ha prodotto risultati");
+            throw new NotFoundException(String.format("Event-Type whit EventName: %s non presente ",eventName));
         }
     }
 
@@ -74,9 +79,14 @@ public class HelperService {
         EventType eventType = modelMapper.map(eventTypeRequest, EventType.class);
 
         if (!eventTypeResponse.isEmpty()) {
-            eventTypeRepository.save(eventType);
+            if(!eventTypeResponse.get().getEventName().equals(eventTypeRequest.getEventName())){
+                eventTypeRepository.save(eventType);
+            }else{
+
+                throw new DuplicateException(String.format("Event-Type con valore EventName: %s è gia presente",eventTypeRequest.getEventName()));
+            }
         } else {
-            throw new Exception("La modifica non è andata a buon fine");
+            throw new NotFoundException(String.format("Event-Type con ID: %s non è presente",eventTypeRequest.getUidEventType()));
         }
     }
 }

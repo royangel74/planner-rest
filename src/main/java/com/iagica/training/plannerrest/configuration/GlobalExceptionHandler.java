@@ -1,7 +1,9 @@
 package com.iagica.training.plannerrest.configuration;
 
+import com.iagica.training.plannerrest.domain.exception.DuplicateException;
 import com.iagica.training.plannerrest.domain.exception.NotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.ServletRegistration;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
@@ -120,6 +122,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ApiCallError<>("Internal server error", List.of(ex.getMessage())));
     }
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<ApiCallError<String>> handleDuplicateException(HttpServletRequest request, DuplicateException duplicateException){
+        logger.error("DuplicateException {}\n", request.getRequestURI(), duplicateException);
+
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                .body(new ApiCallError<>("Duplicate parameter",List.of(duplicateException.getMessage())));
+    }
+
 
     @Data
     @Builder

@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class AgendaResponse {
 
-    Integer id;
+    Integer uidAgenda;
     LocalDate masterDate;
     LocalTime startEventTime;
     LocalTime eventExpired;
