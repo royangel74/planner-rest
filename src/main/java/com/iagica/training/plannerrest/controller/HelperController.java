@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/helper")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:4200")
 public class HelperController {
 
     private final AuthenticationService service;

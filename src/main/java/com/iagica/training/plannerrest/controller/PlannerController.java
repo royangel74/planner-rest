@@ -19,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/planner")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:4200")
 public class PlannerController {
 
 

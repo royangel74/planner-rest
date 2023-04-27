@@ -6,14 +6,12 @@ import com.iagica.training.plannerrest.domain.dto.response.AuthenticationRespons
 import com.iagica.training.plannerrest.services.helper.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/public")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:4200")
 public class PublicController {
 
     private final AuthenticationService service;
