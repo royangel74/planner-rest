@@ -2,10 +2,13 @@ package com.iagica.training.plannerrest.services.helper;
 
 import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
+import com.iagica.training.plannerrest.domain.dto.response.UserResponse;
 import com.iagica.training.plannerrest.domain.exception.NotFoundException;
 import com.iagica.training.plannerrest.domain.exception.DuplicateException;
 import com.iagica.training.plannerrest.domain.model.helper.EventType;
+import com.iagica.training.plannerrest.domain.model.helper.User;
 import com.iagica.training.plannerrest.repository.helper.EventTypeRepository;
+import com.iagica.training.plannerrest.repository.helper.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ public class HelperService {
     @Autowired
     ModelMapper modelMapper;
     private final EventTypeRepository eventTypeRepository;
+    private final UserRepository userRepository;
 
     public List<EventTypeResponse> findAll() throws Exception {
         return eventTypeRepository.findAll().stream().map(eventType -> {
@@ -32,12 +36,12 @@ public class HelperService {
         }).collect(Collectors.toList());
     }
 
-    public EventTypeResponse findById(Integer id) throws Exception{
+    public EventTypeResponse findById(Integer id) throws Exception {
         Optional<EventType> eventType = eventTypeRepository.findById(id);
         if (!eventType.isEmpty()) {
             return new EventTypeResponse(eventType.get().getUidEventType(), eventType.get().getEventName());
         }
-        throw new NotFoundException(String.format("Event-Type whit ID: %s non presente ",id.intValue()));
+        throw new NotFoundException(String.format("Event-Type whit ID: %s non presente ", id.intValue()));
     }
 
     public void insertEventType(EventTypeRequest eventTypeRequest) throws Exception {
@@ -51,7 +55,7 @@ public class HelperService {
         if (verified) {
             eventTypeRepository.save(eventType);
         } else {
-            throw new DuplicateException(String.format("Type-Event con eventName: %s è già presente",eventTypeRequest.getEventName()));
+            throw new DuplicateException(String.format("Type-Event con eventName: %s è già presente", eventTypeRequest.getEventName()));
         }
     }
 
@@ -60,7 +64,7 @@ public class HelperService {
         if (!eventType.isEmpty()) {
             eventTypeRepository.delete(eventType.get());
         } else {
-            throw new NotFoundException(String.format("Event-Type whit ID: %s non presente ",id.intValue()));
+            throw new NotFoundException(String.format("Event-Type whit ID: %s non presente ", id.intValue()));
         }
     }
 
@@ -70,7 +74,7 @@ public class HelperService {
             var eventTypeResponse = new EventTypeResponse(eventType.get().getUidEventType(), eventType.get().getEventName());
             return eventTypeResponse;
         } else {
-            throw new NotFoundException(String.format("Event-Type whit EventName: %s non presente ",eventName));
+            throw new NotFoundException(String.format("Event-Type whit EventName: %s non presente ", eventName));
         }
     }
 
@@ -79,14 +83,25 @@ public class HelperService {
         EventType eventType = modelMapper.map(eventTypeRequest, EventType.class);
 
         if (!eventTypeResponse.isEmpty()) {
-            if(!eventTypeResponse.get().getEventName().equals(eventTypeRequest.getEventName())){
+            if (!eventTypeResponse.get().getEventName().equals(eventTypeRequest.getEventName())) {
                 eventTypeRepository.save(eventType);
-            }else{
+            } else {
 
-                throw new DuplicateException(String.format("Event-Type con valore EventName: %s è gia presente",eventTypeRequest.getEventName()));
+                throw new DuplicateException(String.format("Event-Type con valore EventName: %s è gia presente", eventTypeRequest.getEventName()));
             }
         } else {
-            throw new NotFoundException(String.format("Event-Type con ID: %s non è presente",eventTypeRequest.getUidEventType()));
+            throw new NotFoundException(String.format("Event-Type con ID: %s non è presente", eventTypeRequest.getUidEventType()));
+        }
+    }
+
+    public UserResponse findUserByEmail(String email) throws Exception {
+        Optional<User> user = userRepository.findByUsername(email);
+
+        if (!user.isEmpty()) {
+            return new UserResponse(user.get().getUidUser(), user.get().getName(), user.get().getSurname(), user.get().getUsername());
+
+        } else {
+            throw new NotFoundException(String.format("Nessuno User con email :%s trovato",email));
         }
     }
 }

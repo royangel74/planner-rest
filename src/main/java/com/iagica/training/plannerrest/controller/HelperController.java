@@ -2,6 +2,8 @@ package com.iagica.training.plannerrest.controller;
 
 import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
+import com.iagica.training.plannerrest.domain.dto.response.UserResponse;
+import com.iagica.training.plannerrest.domain.model.helper.User;
 import com.iagica.training.plannerrest.services.helper.AuthenticationService;
 import com.iagica.training.plannerrest.services.helper.HelperService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/helper")
 @RequiredArgsConstructor
-@CrossOrigin("http://localhost:4200")
 public class HelperController {
 
     private final AuthenticationService service;
@@ -60,5 +61,10 @@ public class HelperController {
     public ResponseEntity<?> eventTypeEdete(@RequestBody EventTypeRequest eventTypeRequest) throws Exception {
         helperService.putEventType(eventTypeRequest);
         return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/user/findByEmail/{email}")
+    public ResponseEntity<UserResponse> findUserByEmail(@PathVariable String email) throws Exception{
+       return ResponseEntity.ok(helperService.findUserByEmail(email));
     }
 }

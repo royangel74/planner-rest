@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/public")
 @RequiredArgsConstructor
-@CrossOrigin("http://localhost:4200")
 public class PublicController {
 
     private final AuthenticationService service;
@@ -25,3 +24,4 @@ public class PublicController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 }
+/**/

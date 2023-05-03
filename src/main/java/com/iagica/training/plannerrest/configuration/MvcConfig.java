@@ -4,6 +4,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -18,4 +19,16 @@ public class MvcConfig implements WebMvcConfigurer {
         resolver.setSuffix(".html");
         return resolver;
     }
-}
+            @Override
+            public void addCorsMappings(CorsRegistry registry)
+            {
+
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET","POST","PUT","OPTIONS","DELETE","PATCH")
+                        .allowedHeaders("authorization","content-type")
+                        .allowCredentials(false).maxAge(3600);
+            }
+        }
+
+
