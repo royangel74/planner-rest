@@ -1,6 +1,7 @@
 package com.iagica.training.plannerrest.controller;
 
 import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
+import com.iagica.training.plannerrest.domain.dto.request.RefreshTokenRequest;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
 import com.iagica.training.plannerrest.domain.dto.response.UserResponse;
 import com.iagica.training.plannerrest.domain.model.helper.User;
@@ -11,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,6 +28,10 @@ public class HelperController {
     @PostMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response ) throws IOException {
         service.refreshToken(request, response);
+    }
+    @PostMapping("/refresh-token2")
+    public void refreshToken2(RefreshTokenRequest refreshTokenRequest) throws IOException {
+        service.refreshToken2(refreshTokenRequest);
     }
 
     @GetMapping("/eventType")

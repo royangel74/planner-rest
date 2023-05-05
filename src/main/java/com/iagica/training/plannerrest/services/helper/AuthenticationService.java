@@ -2,6 +2,7 @@ package com.iagica.training.plannerrest.services.helper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iagica.training.plannerrest.domain.dto.request.AuthenticationRequest;
+import com.iagica.training.plannerrest.domain.dto.request.RefreshTokenRequest;
 import com.iagica.training.plannerrest.domain.dto.request.RegisterRequest;
 import com.iagica.training.plannerrest.domain.dto.response.AuthenticationResponse;
 import com.iagica.training.plannerrest.domain.model.helper.Role;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 
 @Service
@@ -89,11 +91,11 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
-    public void refreshToken( HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }
         refreshToken = authHeader.substring(7);
@@ -110,6 +112,30 @@ public class AuthenticationService {
                         .refreshToken(refreshToken)
                         .build();
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+            }
+        }
+    }
+
+    public void refreshToken2(RefreshTokenRequest refreshTokenRequest) throws IOException {
+        String userEmail ="";
+        String refreshToken = "";
+        if(refreshTokenRequest == null){
+            return;
+        }
+        refreshToken = refreshTokenRequest.getRefreshToken();
+
+        userEmail = jwtService.extractUsername(refreshToken);
+        if (userEmail != null) {
+            var user = this.repository.findByUsername(userEmail)
+                    .orElseThrow();
+            if (jwtService.isTokenValid(refreshToken, user)) {
+                var accessToken = jwtService.generateToken(user);
+                revokeAllUserTokens(user);
+                saveUserToken(user, accessToken);
+                var authResponse = AuthenticationResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .build();
             }
         }
     }
