@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -90,7 +91,7 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
-
+/*
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
@@ -116,27 +117,33 @@ public class AuthenticationService {
         }
     }
 
-    public void refreshToken2(RefreshTokenRequest refreshTokenRequest) throws IOException {
-        String userEmail ="";
+ */
+
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) throws IOException {
+        String userEmail = "";
         String refreshToken = "";
-        if(refreshTokenRequest == null){
-            return;
+        if (refreshTokenRequest == null) {
+            return null;
         }
         refreshToken = refreshTokenRequest.getRefreshToken();
 
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse();
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
             var user = this.repository.findByUsername(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
+                var generateRefreshToken = jwtService.generateRefreshToken(user);
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
-                var authResponse = AuthenticationResponse.builder()
+                authenticationResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
-                        .refreshToken(refreshToken)
+                        .refreshToken(generateRefreshToken)
                         .build();
             }
+
         }
+        return authenticationResponse;
     }
 }

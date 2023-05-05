@@ -2,6 +2,7 @@ package com.iagica.training.plannerrest.controller;
 
 import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
 import com.iagica.training.plannerrest.domain.dto.request.RefreshTokenRequest;
+import com.iagica.training.plannerrest.domain.dto.response.AuthenticationResponse;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
 import com.iagica.training.plannerrest.domain.dto.response.UserResponse;
 import com.iagica.training.plannerrest.domain.model.helper.User;
@@ -25,13 +26,17 @@ public class HelperController {
     private final AuthenticationService service;
     private final HelperService helperService;
 
+    /*
     @PostMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response ) throws IOException {
         service.refreshToken(request, response);
     }
-    @PostMapping("/refresh-token2")
-    public void refreshToken2(RefreshTokenRequest refreshTokenRequest) throws IOException {
-        service.refreshToken2(refreshTokenRequest);
+
+     */
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken2(@RequestBody RefreshTokenRequest refreshTokenRequest) throws IOException {
+
+        return ResponseEntity.ok(service.refreshToken(refreshTokenRequest));
     }
 
     @GetMapping("/eventType")
