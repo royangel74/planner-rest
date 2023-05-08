@@ -22,11 +22,6 @@ public class HelperController {
     private final AuthenticationService service;
     private final HelperService helperService;
 
-    @PostMapping("/refresh-token")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response ) throws IOException{
-        service.refreshToken(request, response);
-    }
-
     @GetMapping("/eventType")
     public ResponseEntity<List<EventTypeResponse>> findAllEventType() throws Exception {
         return ResponseEntity.ok(helperService.findAllEventType());

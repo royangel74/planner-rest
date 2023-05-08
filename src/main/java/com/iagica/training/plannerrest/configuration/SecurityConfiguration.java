@@ -30,6 +30,9 @@ public class SecurityConfiguration {
     @Value("${springdoc.swagger-ui.path}")
     private String swaggerPath;
 
+    @Value("${cors.origins}")
+    private String origins;
+
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutService logoutHandler;
@@ -72,7 +75,7 @@ public class SecurityConfiguration {
         var source = new UrlBasedCorsConfigurationSource();
         var config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+        config.addAllowedOrigin(origins);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
