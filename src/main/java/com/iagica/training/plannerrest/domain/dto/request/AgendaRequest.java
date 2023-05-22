@@ -14,7 +14,7 @@ import java.time.LocalTime;
 public class AgendaRequest {
     Integer uidAgenda;
     LocalDate masterDate;
-    LocalTime eventStart;
+    LocalTime startEventTime;
     LocalTime eventExpired;
     String eventPublic;
     EventRequest event;

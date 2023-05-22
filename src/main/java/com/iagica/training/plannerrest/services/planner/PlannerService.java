@@ -106,7 +106,11 @@ public class PlannerService {
     }
 
     public void insertAgenda(AgendaRequest agendaRequest)throws Exception{
+         Event event = modelMapper.map(agendaRequest.getEvent(), Event.class);
+         event.setEventcreation(LocalDateTime.now());
+         eventRepository.save(event);
          Agenda agenda = modelMapper.map(agendaRequest,Agenda.class);
+         agenda.setEvent(event);
          agendaRepository.save(agenda);
     }
 
