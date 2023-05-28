@@ -2,6 +2,7 @@ package com.iagica.training.plannerrest.configuration;
 
 import com.iagica.training.plannerrest.repository.helper.TokenRepository;
 import com.iagica.training.plannerrest.services.helper.JwtService;
+import com.iagica.training.plannerrest.utils.Constants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,11 +36,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null ||!authHeader.startsWith(Constants.BEABER_TOKEN)) {
             filterChain.doFilter(request, response);
             return;
         }
-        jwt = authHeader.substring(7);
+        jwt = authHeader.substring(Constants.BEABER_TOKEN.length());
         userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);

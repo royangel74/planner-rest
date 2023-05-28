@@ -25,25 +25,30 @@ public class User implements UserDetails {
     @Basic(optional = false)
     @Column(name = "uiduser", nullable = false)
     private Integer uiduser;
+
     @Basic
     @Column(name = "name", nullable = false, length = 256)
     private String name;
+
     @Basic
     @Column(name = "surname", nullable = false, length = 256)
     private String surname;
+
     @Basic
     @Column(name = "email", nullable = false, length = 256, unique = true)
     private String username;
+
     @Basic
     @Column(name = "password", nullable = false, length = 128)
     private String password;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, length = 128)
-    private Role role;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role", referencedColumnName = "idrole")
+    public Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.toString()));
     }
 
     @Override

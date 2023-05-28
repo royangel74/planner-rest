@@ -20,9 +20,11 @@ public class EventType {
     @Basic(optional = false)
     @Column(name = "uidenventtype", nullable = false)
     private Integer uidenventtype;
+
     @Basic
     @Column(name = "eventname", nullable = false, length = 256)
     private String eventname;
+
     @Basic
     @Column(name = "duration", nullable = false)
     private Integer duration;

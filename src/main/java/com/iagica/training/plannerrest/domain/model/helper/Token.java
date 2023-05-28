@@ -20,15 +20,19 @@ public class Token {
     @Basic(optional = false)
     @Column(name = "uidtoken", nullable = false, insertable = false)
     private Integer uidtoken;
+
     @Basic
     @Column(name = "expired", nullable = false)
     private boolean expired;
+
     @Basic
     @Column(name = "revoked", nullable = false)
     private boolean revoked;
+
     @Basic
     @Column(name = "token", nullable = true, length = 255)
     private String token;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "tokentype", nullable = true, length = 255)
     private TokenType tokentype;
