@@ -12,7 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -33,9 +35,9 @@ public class HelperController {
     }
 
      */
+
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshToken2(@RequestBody RefreshTokenRequest refreshTokenRequest) throws IOException {
-
         return ResponseEntity.ok(service.refreshToken(refreshTokenRequest));
     }
 
@@ -72,6 +74,7 @@ public class HelperController {
         return ResponseEntity.ok(null);
     }
 
+    @PreAuthorize("hasRole('GUEST')")
     @GetMapping("/user/findByEmail/{email}")
     public ResponseEntity<UserResponse> findUserByEmail(@PathVariable String email) throws Exception{
        return ResponseEntity.ok(helperService.findUserByEmail(email));

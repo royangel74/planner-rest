@@ -5,15 +5,15 @@ import com.iagica.training.plannerrest.domain.dto.request.AuthenticationRequest;
 import com.iagica.training.plannerrest.domain.dto.request.RefreshTokenRequest;
 import com.iagica.training.plannerrest.domain.dto.request.RegisterRequest;
 import com.iagica.training.plannerrest.domain.dto.response.AuthenticationResponse;
-import com.iagica.training.plannerrest.domain.model.helper.Role;
-import com.iagica.training.plannerrest.domain.model.helper.Token;
-import com.iagica.training.plannerrest.domain.model.helper.User;
-import com.iagica.training.plannerrest.domain.model.helper.TokenType;
+import com.iagica.training.plannerrest.domain.model.helper.*;
+import com.iagica.training.plannerrest.repository.helper.RoleRepository;
+import com.iagica.training.plannerrest.repository.helper.RoleRepositoryCustom;
 import com.iagica.training.plannerrest.repository.helper.TokenRepository;
 import com.iagica.training.plannerrest.repository.helper.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,14 +32,18 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final RoleRepository roleRepository;
 
     public AuthenticationResponse register(RegisterRequest request) {
+
+        Ruolo ruolo = roleRepository.findByDefaultRole();
+
         var user = User.builder()
                 .name(request.getFirstname())
                 .surname(request.getLastname())
                 .username(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(ruolo)
                 .build();
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
