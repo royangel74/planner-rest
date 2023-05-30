@@ -39,7 +39,7 @@ public class User implements UserDetails {
     @Basic
     @Column(name="password",nullable = false,length = 128)
     private String password;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="role")
     private Role role;
 
@@ -47,12 +47,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        log.info("CHE SUCCEDEEEEEEEEEEEEEEEEEEEEEE"+List.of(new SimpleGrantedAuthority(role.getRuolo())));
+        log.info("CHE SUCCEDEEEEEEEEEEEEEEEEEEEEEE"+List.of(new SimpleGrantedAuthority(role.toString())));
         //return List.of(new SimpleGrantedAuthority(role.getRuolo()));
         List<GrantedAuthority> authorities
                 = new ArrayList<>();
 
-            authorities.add(new SimpleGrantedAuthority(role.getRuolo()));
+            authorities.add(new SimpleGrantedAuthority(role.toString()));
             return authorities;
 
     }

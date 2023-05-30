@@ -57,7 +57,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByUsername(request.getEmail())
+        var user = repository.searchUserWithRole(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -129,7 +129,7 @@ public class AuthenticationService {
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.repository.findByUsername(userEmail)
+            var user = this.repository.searchUserWithRole(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var generateRefreshToken = jwtService.generateRefreshToken(user);

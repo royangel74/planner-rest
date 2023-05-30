@@ -26,5 +26,9 @@ public class Role {
     @Column(name="role",nullable = false,unique = true)
     private String ruolo;
 
+    @Override
+    public String toString(){
+        return String.format("idRuolo:%s,role:%s",idRuolo,ruolo);
+    }
 
 }
