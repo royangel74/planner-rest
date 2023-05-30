@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -50,6 +51,7 @@ public class HelperController {
     }
 
     @PostMapping("/evenType/insert")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
     public ResponseEntity<?> eventTypeInsert(@RequestBody EventTypeRequest eventTypeRequest) throws Exception {
         helperService.insertEventType(eventTypeRequest);
         return ResponseEntity.ok(null);

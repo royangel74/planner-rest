@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -43,7 +45,7 @@ public class HelperService {
         }
         throw new NotFoundException(String.format("Event-Type whit ID: %s non presente ", id.intValue()));
     }
-
+    @Secured({"ADMIN”,”ROLE_EDITOR"})
     public void insertEventType(EventTypeRequest eventTypeRequest) throws Exception {
 
         List<EventType> listEventTypes = eventTypeRepository.findAll();
@@ -98,7 +100,7 @@ public class HelperService {
         Optional<User> user = userRepository.findByUsername(email);
 
         if (!user.isEmpty()) {
-            return new UserResponse(user.get().getUidUser(), user.get().getName(), user.get().getSurname(), user.get().getUsername());
+            return new UserResponse(user.get().getUidUser(), user.get().getName(), user.get().getSurname(), user.get().getUsername(),user.get().getRole());
 
         } else {
             throw new NotFoundException(String.format("Nessuno User con email :%s trovato",email));

@@ -11,6 +11,7 @@ import com.iagica.training.plannerrest.services.planner.PlannerService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -61,7 +62,7 @@ public class PlannerController {
     public ResponseEntity<List<AgendaResponse>> findByOrary(@RequestBody AgendaDisponibilitaRequest agendaRequest)throws Exception{
         return ResponseEntity.ok(plannerService.findAgendaByOrari(agendaRequest));
     }
-
+    @PreAuthorize("hasRole('ADMIN') or hasRole('GUEST')")
     @PostMapping("/agenda/insertAgenda")
     public ResponseEntity<?> insertAgenda(@RequestBody AgendaRequest agendaRequest)throws Exception{
         plannerService.insertAgenda(agendaRequest);

@@ -5,13 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
+@Log
 @Data
 @Builder
 @NoArgsConstructor
@@ -35,14 +39,24 @@ public class User implements UserDetails {
     @Basic
     @Column(name="password",nullable = false,length = 128)
     private String password;
-    @Column(name="role",nullable = false,length = 128)
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="role")
     private Role role;
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        log.info("CHE SUCCEDEEEEEEEEEEEEEEEEEEEEEE"+List.of(new SimpleGrantedAuthority(role.getRuolo())));
+        //return List.of(new SimpleGrantedAuthority(role.getRuolo()));
+        List<GrantedAuthority> authorities
+                = new ArrayList<>();
+
+            authorities.add(new SimpleGrantedAuthority(role.getRuolo()));
+            return authorities;
+
     }
+
 
     @Override
     public String getPassword() {
@@ -73,5 +87,9 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
+
 
 }
