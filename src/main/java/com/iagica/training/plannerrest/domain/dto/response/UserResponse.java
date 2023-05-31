@@ -1,10 +1,13 @@
 package com.iagica.training.plannerrest.domain.dto.response;
 
+import com.iagica.training.plannerrest.domain.model.helper.Function;
 import com.iagica.training.plannerrest.domain.model.helper.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,4 +19,5 @@ public class UserResponse {
     private String surname;
     private String username;
     private Role ruolo;
+
 }

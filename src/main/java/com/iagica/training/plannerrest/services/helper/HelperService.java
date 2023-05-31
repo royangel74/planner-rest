@@ -3,6 +3,7 @@ package com.iagica.training.plannerrest.services.helper;
 import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
 import com.iagica.training.plannerrest.domain.dto.response.UserResponse;
+import com.iagica.training.plannerrest.domain.dto.response.UserRoleFunctionResponse;
 import com.iagica.training.plannerrest.domain.exception.NotFoundException;
 import com.iagica.training.plannerrest.domain.exception.DuplicateException;
 import com.iagica.training.plannerrest.domain.model.helper.EventType;
@@ -10,6 +11,7 @@ import com.iagica.training.plannerrest.domain.model.helper.User;
 import com.iagica.training.plannerrest.repository.helper.EventTypeRepository;
 import com.iagica.training.plannerrest.repository.helper.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Log
 public class HelperService {
 
     @Autowired
@@ -97,7 +100,7 @@ public class HelperService {
     }
 
     public UserResponse findUserByEmail(String email) throws Exception {
-        Optional<User> user = userRepository.findByUsername(email);
+        Optional<User> user = userRepository.searchUserWithRole(email);
 
         if (!user.isEmpty()) {
             return new UserResponse(user.get().getUidUser(), user.get().getName(), user.get().getSurname(), user.get().getUsername(),user.get().getRole());
@@ -105,5 +108,13 @@ public class HelperService {
         } else {
             throw new NotFoundException(String.format("Nessuno User con email :%s trovato",email));
         }
+
+
     }
+   /* public List<User> searchUser(Integer uidUser,Integer uidrole)throws Exception{
+       List<User> user = userRepository.searchRoleAndFunctionWhithIdRoleAndIdUser(uidUser,uidrole);
+
+        log.info("USSSSSSSSSSSSSSSSSSSSSS "+user);
+        return  user.stream().collect(Collectors.toList());
+    }*/
 }

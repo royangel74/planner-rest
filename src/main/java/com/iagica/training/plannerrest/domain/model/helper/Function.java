@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Data
@@ -26,6 +28,7 @@ public class Function {
 
     @Column(name = "accesfunction",nullable =false)
     private String accesFunction;
+
 
 
 

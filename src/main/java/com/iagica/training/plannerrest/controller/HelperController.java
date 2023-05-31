@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/helper")
 @RequiredArgsConstructor
-public class HelperController {
+public class HelperController extends RestrictedController {
 
     private final AuthenticationService service;
     private final HelperService helperService;
@@ -51,7 +51,7 @@ public class HelperController {
     }
 
     @PostMapping("/evenType/insert")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    @PreAuthorize("this.hasPrevilege(authentication)")
     public ResponseEntity<?> eventTypeInsert(@RequestBody EventTypeRequest eventTypeRequest) throws Exception {
         helperService.insertEventType(eventTypeRequest);
         return ResponseEntity.ok(null);
