@@ -8,20 +8,21 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
+import java.util.Optional;
+
 public class RoleRepositoryCustomImpl implements RoleRepositoryCustom {
 
-    private static final String DefaultRole = "USER";
     @PersistenceContext
     EntityManager entityManager;
     @Override
-    public Role findRoleDefault() {
+    public Optional<Role> findRoleDefault(String defaultRole) {
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Role> query = cb.createQuery(Role.class);
         Root<Role> role = query.from(Role.class);
-        query.select(role).where(role.get("ruolo").in(DefaultRole));
+        query.select(role).where(role.get("ruolo").in(defaultRole));
 
         Role ruolo = entityManager.createQuery(query).getSingleResult();
-        return ruolo;
+        return Optional.ofNullable(ruolo);
     }
 }

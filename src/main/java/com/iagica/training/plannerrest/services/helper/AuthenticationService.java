@@ -4,13 +4,13 @@ import com.iagica.training.plannerrest.domain.dto.request.AuthenticationRequest;
 import com.iagica.training.plannerrest.domain.dto.request.RefreshTokenRequest;
 import com.iagica.training.plannerrest.domain.dto.request.RegisterRequest;
 import com.iagica.training.plannerrest.domain.dto.response.AuthenticationResponse;
-import com.iagica.training.plannerrest.domain.model.helper.Role;
-import com.iagica.training.plannerrest.domain.model.helper.Token;
-import com.iagica.training.plannerrest.domain.model.helper.User;
-import com.iagica.training.plannerrest.domain.model.helper.TokenType;
+import com.iagica.training.plannerrest.domain.exception.NotFoundException;
+import com.iagica.training.plannerrest.domain.model.helper.*;
+import com.iagica.training.plannerrest.repository.helper.ConfigRepository;
 import com.iagica.training.plannerrest.repository.helper.TokenRepository;
 import com.iagica.training.plannerrest.repository.helper.UserRepository;
 import com.iagica.training.plannerrest.repository.helper.RoleRepository;
+import com.iagica.training.plannerrest.utility.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,16 +30,17 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ConfigRepository configRepository;
 
     public AuthenticationResponse register(RegisterRequest request) {
-       Role ruolo = roleRepository.findRoleDefault();
+
 
         var user = User.builder()
                 .name(request.getFirstname())
                 .surname(request.getLastname())
                 .username(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(ruolo)
+                .role(searchRoleByDefault())
                 .build();
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -144,5 +146,22 @@ public class AuthenticationService {
 
         }
         return authenticationResponse;
+    }
+
+
+    public Role searchRoleByDefault() {
+        Optional<Config> config = configRepository.searchConfigByKeyNameAndExpiration(Constants.defaultConfig);
+        if (!config.isEmpty()) {
+            Optional<Role> role = roleRepository.findRoleDefault(config.get().getKeyvalue());
+            if (!role.isEmpty()) {
+                return role.get();
+            } else {
+                String errMsg = "Nessun ruolo trovato";
+                throw new NotFoundException(errMsg);
+            }
+        } else {
+            throw new NotFoundException("");
+        }
+
     }
 }
