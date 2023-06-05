@@ -21,33 +21,40 @@ public abstract class RestrictedController {
 
 
     public abstract String getPreAuthorizeControllerFunction();
+
     @Autowired
     HelperService service;
     @Autowired
     FunctionRepository functionRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public boolean hasPrevilege(Authentication authentication, String Function) throws Exception {
-        Integer idRuolo = AppUtility.getRoleByAutority(authentication.getAuthorities().toString());
-        Role role = new Role();
         FunctionRolePK functionRolePK = new FunctionRolePK();
-        if (idRuolo != 0) {
-            role.setIdRuolo(idRuolo);
-            functionRolePK.setUidrole(role);
-        } else {
-            String ErrMsg = "Nessun Id Ruolo trovato";
-            throw new NotFoundException(ErrMsg);
-        }
-        Optional<Function> function = functionRepository.findByTypeFunction(Function);
-        if (function.isEmpty()) {
-            String ErrMsg = "Nessuna Function Trovata";
-            throw new NotFoundException(ErrMsg);
-        } else {
-            functionRolePK.setUidfunction(function.get());
-        }
-        List<FunctionRoleResponse> f = service.searchFunctionRole(functionRolePK);
+        Integer idRuolo = AppUtility.getRoleByAutority(authentication.toString());
+        String username = AppUtility.getUsername(authentication.getPrincipal().toString());
+        Optional<User> user = userRepository.searchUserWithRole(username);
+        if (!user.isEmpty()) {
 
-        boolean verify = f.stream().anyMatch(c -> c.getFunction().getTypeFunction().contains(Function) && c.getRole().getIdRuolo().equals(role.getIdRuolo())&& c.getAccess().contains(getPreAuthorizeControllerFunction()));
+            if (user.get().getRole().getIdRuolo() == idRuolo) {
+                 functionRolePK.setUidrole(user.get().getRole());
+            }
+            Optional<Function> function = functionRepository.findByTypeFunction(Function);
 
-        return verify;
+            if (function.isEmpty()) {
+                String ErrMsg = "Nessuna Function Trovata";
+                throw new NotFoundException(ErrMsg);
+            } else {
+                functionRolePK.setUidfunction(function.get());
+            }
+            List<FunctionRoleResponse> f = service.searchFunctionRole(functionRolePK);
+
+            boolean verify = f.stream().anyMatch(c -> c.getFunction().getTypeFunction().contains(Function) && c.getRole().getIdRuolo().equals(user.get().getRole().getIdRuolo()) && c.getAccess().contains(getPreAuthorizeControllerFunction()));
+
+            return verify;
+        }
+      return false;
     }
+
+
 }
