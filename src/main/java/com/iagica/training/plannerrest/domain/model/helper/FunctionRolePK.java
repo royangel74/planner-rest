@@ -1,23 +1,26 @@
 package com.iagica.training.plannerrest.domain.model.helper;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Embeddable
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Embeddable
 public class FunctionRolePK {
-
-    @Column(name = "uidrole")
-    private Integer idRuolo;
-
-
-    @Column(name="uidfunction")
-    private Integer idFunction;
+    @ManyToOne
+    @JoinColumn(name = "uidrole")
+    private Role uidrole;
+    @ManyToOne
+    @JoinColumn(name = "uidfunction")
+    private Function uidfunction;
 }

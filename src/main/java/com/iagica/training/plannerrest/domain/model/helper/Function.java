@@ -26,8 +26,8 @@ public class Function {
     @Column(name = "typefunction",nullable = false)
     private String typeFunction;
 
-    @Column(name = "accesfunction",nullable =false)
-    private String accesFunction;
+    @Column(name = "accessfunction",nullable =false)
+    private Integer accesFunction;
 
 
 

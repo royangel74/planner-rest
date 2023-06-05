@@ -8,6 +8,7 @@ import com.iagica.training.plannerrest.domain.dto.response.UserResponse;
 import com.iagica.training.plannerrest.domain.model.helper.User;
 import com.iagica.training.plannerrest.services.helper.AuthenticationService;
 import com.iagica.training.plannerrest.services.helper.HelperService;
+import com.iagica.training.plannerrest.utility.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.server.PathParam;
@@ -39,35 +40,35 @@ public class HelperController extends RestrictedController {
 
         return ResponseEntity.ok(service.refreshToken(refreshTokenRequest));
     }
-
+    @PreAuthorize("this.hasPrevilege(authentication,'READ')")
     @GetMapping("/eventType")
     public ResponseEntity<List<EventTypeResponse>> EventTypeFindAll() throws Exception {
         return ResponseEntity.ok(helperService.findAll());
     }
-
+    @PreAuthorize("this.hasPrevilege(authentication,'READ')")
     @GetMapping("/eventType/{id}")
     public ResponseEntity<EventTypeResponse> eventTypeFindById(@PathVariable Integer id) throws Exception {
         return ResponseEntity.ok(helperService.findById(id));
     }
 
     @PostMapping("/evenType/insert")
-    @PreAuthorize("this.hasPrevilege(authentication)")
+    @PreAuthorize("this.hasPrevilege(authentication,'CREATE')")
     public ResponseEntity<?> eventTypeInsert(@RequestBody EventTypeRequest eventTypeRequest) throws Exception {
         helperService.insertEventType(eventTypeRequest);
         return ResponseEntity.ok(null);
     }
-
+    @PreAuthorize("this.hasPrevilege(authentication,'DELETE')")
     @DeleteMapping("/eventType/delete/{id}")
     public ResponseEntity<?> eventTypeDelete(@PathVariable Integer id) throws Exception {
         helperService.deleteEventType(id);
         return ResponseEntity.ok(null);
     }
-
+    @PreAuthorize("this.hasPrevilege(authentication,'READ')")
     @GetMapping("/eventType/findByEventName/{name}")
     public ResponseEntity<EventTypeResponse> eventTypeFindName(@PathVariable String name) throws Exception {
         return  ResponseEntity.ok(helperService.findEventTypeByName(name));
     }
-
+    @PreAuthorize("this.hasPrevilege(authentication,'UPDATE')")
     @PutMapping("/eventType/editEventType")
     public ResponseEntity<?> eventTypeEdete(@RequestBody EventTypeRequest eventTypeRequest) throws Exception {
         helperService.putEventType(eventTypeRequest);
@@ -77,5 +78,13 @@ public class HelperController extends RestrictedController {
     @GetMapping("/user/findByEmail/{email}")
     public ResponseEntity<UserResponse> findUserByEmail(@PathVariable String email) throws Exception{
        return ResponseEntity.ok(helperService.findUserByEmail(email));
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public String getPreAuthorizeControllerFunction() {
+        return Constants.accessEvent;
     }
 }

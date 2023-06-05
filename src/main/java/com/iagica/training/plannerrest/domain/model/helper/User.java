@@ -42,13 +42,7 @@ public class User implements UserDetails {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="role")
     private Role role;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "tab_function_role",
-            joinColumns = @JoinColumn(name="uidrole"),
-            inverseJoinColumns = @JoinColumn(name = "uidfunction")
-    )
-    private Set<Function> functions = new HashSet<>();
+
 
 
     @Override

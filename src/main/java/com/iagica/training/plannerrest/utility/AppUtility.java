@@ -8,9 +8,6 @@ import java.util.Arrays;
 public class AppUtility {
 
     public static Integer getRoleByAutority(String ruolo){
-     log.info("ssssssssssssssssssssssssss"+  Arrays.stream(ruolo.split(",")).filter(r->r.contains("idRuolo")).findFirst().map(i->{
-            return Integer.parseInt(i.split(":")[1]);
-        }));
         return Arrays.stream(ruolo.split(",")).filter(r->r.contains("idRuolo")).findFirst().map(i->{
             return Integer.parseInt(i.split(":")[1]);
         }).orElse(null);

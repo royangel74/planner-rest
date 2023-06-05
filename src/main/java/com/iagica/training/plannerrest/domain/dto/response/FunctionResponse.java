@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleResponse {
-    private Integer uidRole;
-    private String role;
+public class FunctionResponse {
+    private Integer idFunction;
+    private String typeFunction;
+    private String AccessFunction;
 }

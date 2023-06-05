@@ -2,13 +2,13 @@ package com.iagica.training.plannerrest.services.helper;
 
 import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
+import com.iagica.training.plannerrest.domain.dto.response.FunctionRoleResponse;
 import com.iagica.training.plannerrest.domain.dto.response.UserResponse;
-import com.iagica.training.plannerrest.domain.dto.response.UserRoleFunctionResponse;
 import com.iagica.training.plannerrest.domain.exception.NotFoundException;
 import com.iagica.training.plannerrest.domain.exception.DuplicateException;
-import com.iagica.training.plannerrest.domain.model.helper.EventType;
-import com.iagica.training.plannerrest.domain.model.helper.User;
+import com.iagica.training.plannerrest.domain.model.helper.*;
 import com.iagica.training.plannerrest.repository.helper.EventTypeRepository;
+import com.iagica.training.plannerrest.repository.helper.FunctionRoleRepository;
 import com.iagica.training.plannerrest.repository.helper.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -20,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,6 +34,8 @@ public class HelperService {
     ModelMapper modelMapper;
     private final EventTypeRepository eventTypeRepository;
     private final UserRepository userRepository;
+
+    private final FunctionRoleRepository functionRoleRepository;
 
     public List<EventTypeResponse> findAll() throws Exception {
         return eventTypeRepository.findAll().stream().map(eventType -> {
@@ -48,6 +51,7 @@ public class HelperService {
         }
         throw new NotFoundException(String.format("Event-Type whit ID: %s non presente ", id.intValue()));
     }
+
     @Secured({"ADMIN”,”ROLE_EDITOR"})
     public void insertEventType(EventTypeRequest eventTypeRequest) throws Exception {
 
@@ -103,18 +107,21 @@ public class HelperService {
         Optional<User> user = userRepository.searchUserWithRole(email);
 
         if (!user.isEmpty()) {
-            return new UserResponse(user.get().getUidUser(), user.get().getName(), user.get().getSurname(), user.get().getUsername(),user.get().getRole());
+            return new UserResponse(user.get().getUidUser(), user.get().getName(), user.get().getSurname(), user.get().getUsername(), user.get().getRole());
 
         } else {
-            throw new NotFoundException(String.format("Nessuno User con email :%s trovato",email));
+            throw new NotFoundException(String.format("Nessuno User con email :%s trovato", email));
         }
 
 
     }
-   /* public List<User> searchUser(Integer uidUser,Integer uidrole)throws Exception{
-       List<User> user = userRepository.searchRoleAndFunctionWhithIdRoleAndIdUser(uidUser,uidrole);
 
-        log.info("USSSSSSSSSSSSSSSSSSSSSS "+user);
-        return  user.stream().collect(Collectors.toList());
-    }*/
+    public List<FunctionRoleResponse> searchFunctionRole(FunctionRolePK functionRolePK) throws Exception {
+
+        return functionRoleRepository.findByfunctionRolePK(functionRolePK).stream().map(
+                functionRole -> {
+                    var functionRoleList = new FunctionRoleResponse(functionRole.getFunctionRolePK().getUidrole(), functionRole.getFunctionRolePK().getUidfunction(),functionRole.getAccess());
+                    return  functionRoleList;
+                }).collect(Collectors.toList());
+    }
 }
