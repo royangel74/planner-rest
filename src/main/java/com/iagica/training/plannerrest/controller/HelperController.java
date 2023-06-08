@@ -37,8 +37,8 @@ public class HelperController {
      */
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshToken2(@RequestBody RefreshTokenRequest refreshTokenRequest) throws IOException {
-        return ResponseEntity.ok(service.refreshToken(refreshTokenRequest));
+    public ResponseEntity<?> refreshToken2(@RequestBody RefreshTokenRequest refreshTokenRequest, RefreshTokenResponse refreshTokenResponse) throws IOException {
+        return ResponseEntity.ok(service.refreshToken(refreshTokenRequest, refreshTokenResponse));
     }
 
     @GetMapping("/eventType")

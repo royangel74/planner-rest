@@ -38,11 +38,11 @@ public class User implements UserDetails {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="role", referencedColumnName = "uidRole")
-    private Ruolo role;
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getRuolo()));
+        return List.of(new SimpleGrantedAuthority(role.name().toString()));
     }
 
     @Override
