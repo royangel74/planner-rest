@@ -2,7 +2,6 @@ package com.iagica.training.plannerrest.services.helper;
 
 import com.iagica.training.plannerrest.domain.dto.request.EventTypeRequest;
 import com.iagica.training.plannerrest.domain.dto.response.EventTypeResponse;
-import com.iagica.training.plannerrest.domain.dto.response.FunctionRoleResponse;
 import com.iagica.training.plannerrest.domain.dto.response.UserResponse;
 import com.iagica.training.plannerrest.domain.exception.NotFoundException;
 import com.iagica.training.plannerrest.domain.exception.DuplicateException;
@@ -14,13 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,7 +46,7 @@ public class HelperService {
         throw new NotFoundException(String.format("Event-Type whit ID: %s non presente ", id.intValue()));
     }
 
-    @Secured({"ADMIN”,”ROLE_EDITOR"})
+
     public void insertEventType(EventTypeRequest eventTypeRequest) throws Exception {
 
         List<EventType> listEventTypes = eventTypeRepository.findAll();
@@ -116,12 +110,7 @@ public class HelperService {
 
     }
 
-    public List<FunctionRoleResponse> searchFunctionRole(FunctionRolePK functionRolePK) throws Exception {
-
-        return functionRoleRepository.findByfunctionRolePK(functionRolePK).stream().map(
-                functionRole -> {
-                    var functionRoleList = new FunctionRoleResponse(functionRole.getFunctionRolePK().getUidrole(), functionRole.getFunctionRolePK().getUidfunction(),functionRole.getAccess());
-                    return  functionRoleList;
-                }).collect(Collectors.toList());
+    public FunctionRole searchFunctionRole(String username,String typeFunction,String access) throws Exception {
+      return functionRoleRepository.searchFunctionRoleWhitEmailAndTypeFunctionAndStringAccess(username,typeFunction,access);
     }
 }

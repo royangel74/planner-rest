@@ -37,23 +37,17 @@ public abstract class RestrictedController {
         if (!user.isEmpty()) {
 
             if (user.get().getRole().getIdRuolo() == idRuolo) {
-                 functionRolePK.setUidrole(user.get().getRole());
-            }
-            Optional<Function> function = functionRepository.findByTypeFunction(Function);
-
-            if (function.isEmpty()) {
-                String ErrMsg = "Nessuna Function Trovata";
-                throw new NotFoundException(ErrMsg);
+                FunctionRole functionRole = service.searchFunctionRole(username, Function, getPreAuthorizeControllerFunction());
+                if (functionRole != null) {
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
-                functionRolePK.setUidfunction(function.get());
+                throw new Exception("ERRORE");
             }
-            List<FunctionRoleResponse> f = service.searchFunctionRole(functionRolePK);
-
-            boolean verify = f.stream().anyMatch(c -> c.getFunction().getTypeFunction().contains(Function) && c.getRole().getIdRuolo().equals(user.get().getRole().getIdRuolo()) && c.getAccess().contains(getPreAuthorizeControllerFunction()));
-
-            return verify;
         }
-      return false;
+        return false;
     }
 
 

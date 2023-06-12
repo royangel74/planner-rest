@@ -64,7 +64,7 @@ public class PlannerController extends RestrictedController {
     public ResponseEntity<List<AgendaResponse>> findByOrary(@RequestBody AgendaDisponibilitaRequest agendaRequest)throws Exception{
         return ResponseEntity.ok(plannerService.findAgendaByOrari(agendaRequest));
     }
-    @PreAuthorize("this.hasPrevilege(authentication,'INSERT')")
+    @PreAuthorize("this.hasPrevilege(authentication,'CREATE')")
     @PostMapping("/agenda/insertAgenda")
     public ResponseEntity<?> insertAgenda(@RequestBody AgendaRequest agendaRequest)throws Exception{
         plannerService.insertAgenda(agendaRequest);
