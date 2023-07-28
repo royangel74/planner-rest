@@ -8,8 +8,10 @@ import com.iagica.training.plannerrest.repository.helper.FunctionRoleRepository;
 import com.iagica.training.plannerrest.repository.helper.UserRepository;
 import com.iagica.training.plannerrest.services.helper.HelperService;
 import com.iagica.training.plannerrest.utility.AppUtility;
+import com.iagica.training.plannerrest.utility.Constants;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
@@ -24,8 +26,6 @@ public abstract class RestrictedController {
 
     @Autowired
     HelperService service;
-    @Autowired
-    FunctionRepository functionRepository;
     @Autowired
     UserRepository userRepository;
 
@@ -44,7 +44,7 @@ public abstract class RestrictedController {
                     return false;
                 }
             } else {
-                throw new Exception("ERRORE");
+                throw new AccessDeniedException(Constants.messaggeErrorAccess);
             }
         }
         return false;

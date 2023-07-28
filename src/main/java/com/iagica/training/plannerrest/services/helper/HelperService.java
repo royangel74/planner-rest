@@ -111,6 +111,7 @@ public class HelperService {
     }
 
     public FunctionRole searchFunctionRole(String username,String typeFunction,String access) throws Exception {
+     //   boolean  veri= functionRoleRepository.searchFunctionRoleWhitEmailAndRoleAndAccess();
       return functionRoleRepository.searchFunctionRoleWhitEmailAndTypeFunctionAndStringAccess(username,typeFunction,access);
     }
 }
